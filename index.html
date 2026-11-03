@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>ตรวจงาน QR</title>
+</head>
+<body style="font-family:sans-serif;padding:24px;color:#333">กำลังโหลด…
+<script>
+(function () {
+  var EXEC = 'https://script.google.com/macros/s/AKfycbzr2BITh0ljh8ybgsSYH2hXVLQTt7vswqFewDqLCgscbRUxADE8lLk21yZtV_H6Gx8sYg/exec';
+  var m = /[#&]k=([^&]+)/.exec(location.hash || ''), k = m ? m[1] : '';
+  try { if (k) localStorage.setItem('qrKey', k); else k = localStorage.getItem('qrKey') || ''; } catch (e) {}
+  if (!k) { document.body.textContent = 'กรุณาเปิดผ่านลิงก์จากเมนู "ระบบตรวจงาน QR" ในชีท'; return; }
+  fetch(EXEC + '?api=page&k=' + encodeURIComponent(k)).then(function (r) { return r.json(); }).then(function (d) {
+    if (!d || !d.ok) throw new Error(d && d.msg || 'ไม่มีข้อมูล');
+    document.open(); document.write(d.html); document.close();
+  }).catch(function (e) { document.body.textContent = 'โหลดไม่สำเร็จ: ' + e.message; });
+})();
+</script>
+</body>
+</html>
